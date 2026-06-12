@@ -110,4 +110,4 @@ wf = {
 
 **ComfyUI 崩潰：本次單張驗證未重現**（~5s 乾淨完成）。依約定暫不另開穩定性修復；若日後反覆重現再評估（混合 GPU 鎖 NVIDIA / 動態 VRAM 記憶體策略 / 驅動 TDR）。
 
-**收尾：** 驗證完成後關閉殘留的 art_tool server（8099）；in-memory job 隨進程釋放。產物（9 候選 + 2 adopted + metadata）持久化於硬碟。
+**收尾：** 驗證完成後關閉殘留的 art_tool server（8099），in-memory job 隨進程釋放；**ComfyUI（8000）仍在線**。產物（generated 9 / adopted 2 + metadata）持久化於硬碟。玩家端 `public/*` 程式碼與故事 JSON md5 與基線一致、全程未動。
