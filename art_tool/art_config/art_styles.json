@@ -70,6 +70,24 @@
       "sampler": "er_sde",
       "scheduler": "simple",
       "optional_lora": null
+    },
+    {
+      "id": "anima_airbrush_editorial",
+      "name": "Anima 空氣感插畫風",
+      "checkpoint": "anima_baseV10.safetensors",
+      "positive_prefix": "score_7, safe, young woman, black hair, aqua eyes, oversized pale blue t-shirt, paint-splattered dark teal baseball cap, small white front patch on cap, holding a fountain pen, full body, airy semi-painterly rendering, thin understated linework, delicate sparse lineart, subtle brush-painted shading, matte soft skin, low saturation skin tones, luminous white fabric, soft overexposed whites, pale gray background, lots of negative space, cyan and warm orange reflected accents, glossy reflected highlights on cap and fabric, subtle reflected highlights, soft tonal shading, quiet restrained expression, non-glamorous mood, modern Japanese editorial illustration",
+      "negative_prompt": "score_1, score_2, score_3, artist name, plastic skin, glossy skin, shiny legs, foot focus, feet close-up, pin-up, glamour pose, glamorous beauty shot, idol poster, generic waifu, generic anime portrait, moe style, moe smile, overly cute expression, hard cel shading, thick outline, thick lineart, saturated cyan, oversaturated colors, candy colors, commercial anime render, overly clean digital anime, high contrast, 3d render, realistic skin, western comic style, chibi, cartoonish proportions, busy background, detailed scenery, cleavage, sexy glamour, fanservice, nsfw",
+      "loras": [
+        { "name": "gpt-image-2_anima-base1_v1.safetensors", "strength_model": 0.70, "strength_clip": 0.70 },
+        { "name": "dogma_animaV1.6.safetensors", "strength_model": 0.40, "strength_clip": 0.40 }
+      ],
+      "width": 896,
+      "height": 1344,
+      "steps": 30,
+      "cfg": 4.0,
+      "sampler": "er_sde",
+      "scheduler": "simple",
+      "optional_lora": null
     }
   ]
 }

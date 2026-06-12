@@ -489,3 +489,106 @@ def test_wait_malformed_history_no_crash():
     )
     assert r2.status == "error"
     assert "p-m2" in r2.message and "status=error" in r2.message
+
+
+# ======================================================================
+# get_loras
+# ======================================================================
+def test_get_loras_lists_from_models_endpoint():
+    loras, warns = cc.get_loras(
+        "http://127.0.0.1:8000",
+        http_get=route_get([("/models/loras", FakeResp(200, ["a.safetensors", "b.safetensors"]))]),
+    )
+    assert loras == ["a.safetensors", "b.safetensors"]
+
+
+def test_get_loras_fallback_object_info():
+    loras, warns = cc.get_loras(
+        "http://127.0.0.1:8000",
+        http_get=route_get([
+            ("/models/loras", ConnectionError("nope")),
+            ("/object_info/LoraLoader", FakeResp(200, {
+                "LoraLoader": {"input": {"required": {"lora_name": [["x.safetensors"]]}}}})),
+        ]),
+    )
+    assert loras == ["x.safetensors"]
+
+
+def test_get_loras_failure_no_crash():
+    loras, warns = cc.get_loras(
+        "http://127.0.0.1:8000",
+        http_get=route_get([("/models", ConnectionError("down"))]),
+    )
+    assert loras == [] and warns
+
+
+# ======================================================================
+# patch_workflow：LoRA 動態注入
+# ======================================================================
+def _lora_nodes(wf):
+    return {nid: n for nid, n in wf.items() if n.get("class_type") == "LoraLoader"}
+
+
+def test_patch_no_loras_unchanged():
+    """loras=None / [] → 不注入 LoraLoader，與無 LoRA 行為一致。"""
+    res_none = cc.patch_workflow(_load_base(), **PATCH_KW)
+    res_empty = cc.patch_workflow(_load_base(), **PATCH_KW, loras=[], available_loras=[])
+    assert _lora_nodes(res_none.workflow) == {}
+    assert _lora_nodes(res_empty.workflow) == {}
+    # KSampler.model 仍指向原模型來源（UNETLoader 節點 4）
+    assert res_none.workflow["3"]["inputs"]["model"] == ["4", 0]
+
+
+def test_patch_one_lora_injected():
+    res = cc.patch_workflow(
+        _load_base(), **PATCH_KW,
+        loras=[{"name": "x.safetensors", "strength_model": 0.8, "strength_clip": 0.7}],
+        available_loras=["x.safetensors"],
+    )
+    assert res.ok is True
+    lns = _lora_nodes(res.workflow)
+    assert len(lns) == 1
+    nid = next(iter(lns))
+    node = lns[nid]
+    assert node["inputs"]["lora_name"] == "x.safetensors"
+    assert node["inputs"]["strength_model"] == 0.8 and node["inputs"]["strength_clip"] == 0.7
+    # 來源串接：lora 取 UNETLoader(4)/CLIPLoader(10)
+    assert node["inputs"]["model"] == ["4", 0]
+    assert node["inputs"]["clip"] == ["10", 0]
+    # 消費端改指 lora 輸出
+    assert res.workflow["3"]["inputs"]["model"] == [nid, 0]
+    assert res.workflow["6"]["inputs"]["clip"] == [nid, 1]
+    assert res.workflow["7"]["inputs"]["clip"] == [nid, 1]
+
+
+def test_patch_multi_lora_chain():
+    res = cc.patch_workflow(
+        _load_base(), **PATCH_KW,
+        loras=[{"name": "a.safetensors"}, {"name": "b.safetensors"}, {"name": "c.safetensors"}],
+        available_loras=["a.safetensors", "b.safetensors", "c.safetensors"],
+    )
+    assert res.ok is True
+    assert len(_lora_nodes(res.workflow)) == 3
+    # 鏈：lora_0(來源4/10) → lora_1 → lora_2 → KSampler/CLIPTextEncode
+    assert res.workflow["lora_0"]["inputs"]["model"] == ["4", 0]
+    assert res.workflow["lora_0"]["inputs"]["clip"] == ["10", 0]
+    assert res.workflow["lora_1"]["inputs"]["model"] == ["lora_0", 0]
+    assert res.workflow["lora_1"]["inputs"]["clip"] == ["lora_0", 1]
+    assert res.workflow["lora_2"]["inputs"]["model"] == ["lora_1", 0]
+    assert res.workflow["3"]["inputs"]["model"] == ["lora_2", 0]
+    assert res.workflow["6"]["inputs"]["clip"] == ["lora_2", 1]
+
+
+def test_patch_missing_lora_skipped_with_warning():
+    """available 沒有的 LoRA → skip + warning，但 patch 仍 ok（生成不被擋）。"""
+    res = cc.patch_workflow(
+        _load_base(), **PATCH_KW,
+        loras=[{"name": "present.safetensors"}, {"name": "absent.safetensors"}],
+        available_loras=["present.safetensors"],
+    )
+    assert res.ok is True                       # 缺 LoRA 非致命
+    assert len(_lora_nodes(res.workflow)) == 1   # 只注入存在的那個
+    assert any("absent.safetensors" in w for w in res.warnings)
+    # 沒有任何 LoraLoader 用到缺失的 lora
+    assert all(n["inputs"]["lora_name"] != "absent.safetensors"
+               for n in _lora_nodes(res.workflow).values())

@@ -13,6 +13,27 @@
   var gridEmpty = document.getElementById("candidate-empty");
   var reloadBtn = document.getElementById("reload-candidates");
 
+  // ---- LoRA 缺失提示（依所選畫風）----
+  var styleSel = document.getElementById("style-select");
+  var loraWarn = document.getElementById("lora-warning");
+  function updateLoraWarning() {
+    if (!styleSel || !loraWarn) return;
+    var opt = styleSel.options[styleSel.selectedIndex];
+    var raw = (opt && opt.getAttribute("data-missing")) || "";
+    var missing = raw.split(",").filter(function (x) { return x.trim(); });
+    if (missing.length) {
+      loraWarn.hidden = false;
+      loraWarn.textContent =
+        "此畫風需要的 LoRA 缺失：" + missing.join(", ") +
+        " → 結果可能不像參考圖（請放入 ComfyUI/models/loras）。";
+    } else {
+      loraWarn.hidden = true;
+      loraWarn.textContent = "";
+    }
+  }
+  if (styleSel) styleSel.addEventListener("change", updateLoraWarning);
+  updateLoraWarning();
+
   function formData() {
     var d = new FormData(form);
     d.delete("checkpoint"); // dry-run 不驗 checkpoint

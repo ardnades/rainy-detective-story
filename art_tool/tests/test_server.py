@@ -45,6 +45,12 @@ def make_appconfig(url="http://127.0.0.1:8000", path=None):
     )
 
 
+@pytest.fixture(autouse=True)
+def _mock_loras(monkeypatch):
+    """server 測試不連真 ComfyUI：預設 get_loras 回空。需要特定行為的測試可再覆寫。"""
+    monkeypatch.setattr(comfy_client, "get_loras", lambda *a, **k: ([], []))
+
+
 @pytest.fixture
 def client(monkeypatch):
     """預設：online、無 checkpoint。各測試可再覆寫 health_check。"""
@@ -168,7 +174,7 @@ def test_api_health_offline(monkeypatch):
 # ----------------------------------------------------------------------
 def test_api_config_summary(client):
     data = client.get("/api/config-summary").json()
-    assert data["styles_count"] == 5
+    assert data["styles_count"] == 6
     assert data["characters_count"] == 1
     assert data["tasks_count"] == 6
     assert data["workflow_loaded"] is True
@@ -434,7 +440,23 @@ def test_api_diagnostics_summary(client, monkeypatch):
     assert data["comfyui"]["online"] is True
     assert data["comfyui"]["checkpoints_ok"] is False
     assert data["comfyui"]["status_level"] == "yellow"
-    assert data["config"]["styles_count"] == 5
+    assert data["config"]["styles_count"] == 6
     assert data["config"]["can_generate"] is False
     assert data["assets"]["generated_count"] == 2
     assert data["assets"]["adopted_count"] == 1
+
+
+def test_api_diagnostics_loras_found_missing(client, monkeypatch):
+    """diagnostics 列出 available / required / missing；缺 LoRA 不改 can_generate。"""
+    monkeypatch.setattr(comfy_client, "get_loras",
+                        lambda *a, **k: (["dogma_animaV1.6.safetensors"], []))
+    data = client.get("/api/diagnostics").json()
+    loras = data["loras"]
+    assert "dogma_animaV1.6.safetensors" in loras["available"]
+    # anima_airbrush_editorial（D 版）需要 gpt-image-2 + dogma：dogma found、gpt-image-2 missing
+    assert "gpt-image-2_anima-base1_v1.safetensors" in loras["missing"]
+    assert "dogma_animaV1.6.safetensors" not in loras["missing"]
+    assert "AnimaNEWNSS8.safetensors" not in loras["required"]   # D 版已移除 NSS
+    assert "anima_airbrush_editorial" in [b["id"] for b in loras["by_style"]]
+    # 缺 LoRA 不影響 can_generate（此處 False 是因無 checkpoint，與 lora 無關）
+    assert data["config"]["can_generate"] is False

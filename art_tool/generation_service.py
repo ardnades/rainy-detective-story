@@ -143,6 +143,7 @@ def build_generation_prompt(
         "cfg": (style or {}).get("cfg", 7.0),
         "sampler": (style or {}).get("sampler", "euler"),
         "scheduler": (style or {}).get("scheduler", "normal"),
+        "loras": (style or {}).get("loras") or [],
         "style_id": request.style_id,
         "style_name": (style or {}).get("name"),
         "character_id": request.character_id,
@@ -231,6 +232,9 @@ def create_generation_job(
 
     # e. 逐張 patch + queue（batch 用不同 seed）
     url = app_config.comfyui.url
+    # 畫風有指定 LoRA 才查可用清單；缺的 LoRA 由 patch_workflow skip + warning（不擋生成）。
+    style_loras = prompt.get("loras") or []
+    available_loras = comfy_client.get_loras(url)[0] if style_loras else []
     for i in range(request.batch_count):
         seed_i = (prompt["seed"] + i) % (SEED_MAX + 1)
         patched = comfy_client.patch_workflow(
@@ -239,7 +243,10 @@ def create_generation_job(
             checkpoint=prompt["checkpoint"], width=prompt["width"], height=prompt["height"],
             seed=seed_i, steps=prompt["steps"], cfg=prompt["cfg"],
             sampler=prompt["sampler"], scheduler=prompt["scheduler"],
+            loras=style_loras, available_loras=available_loras,
         )
+        if patched.warnings:
+            job.warnings.extend(w for w in patched.warnings if w not in job.warnings)
         if not patched.ok:
             return _fail(job, "workflow patch 失敗，未送出生成。", patched.warnings, now)
         qr = comfy_client.queue_prompt(url, patched.workflow, client_id=job_id)

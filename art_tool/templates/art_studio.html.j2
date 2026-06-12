@@ -67,15 +67,45 @@
     </table>
   </section>
 
+  <!-- LoRA 狀態 -->
+  <section class="card">
+    <h2>畫風 LoRA 狀態</h2>
+    {% if lora_status.by_style %}
+      <table class="kv lora-table">
+        <tr><th>畫風</th><th>LoRA</th></tr>
+        {% for b in lora_status.by_style %}
+        <tr>
+          <th>{{ b.name }}</th>
+          <td>
+            {% for l in b.loras %}
+              <span class="lora-badge {{ 'found' if l.found else 'missing' }}">
+                {{ '✓' if l.found else '✗' }} {{ l.name }}
+              </span>
+            {% endfor %}
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
+      {% if lora_status.missing %}
+        <p class="hint hint-yellow">checkpoint 已就緒，但部分畫風需要的 LoRA 缺失（✗）：{{ lora_status.missing | join(', ') }}。請把對應 .safetensors 放入 ComfyUI/models/loras，否則結果可能不像參考圖。</p>
+      {% else %}
+        <p class="muted">所有畫風所需 LoRA 皆已就緒。</p>
+      {% endif %}
+    {% else %}
+      <p class="muted">目前沒有任何畫風指定 LoRA。</p>
+    {% endif %}
+  </section>
+
   <!-- 5. Generation Form Placeholder -->
   <section class="card">
     <h2>生成設定</h2>
     <form id="dry-run-form" class="gen-form">
       <label>畫風
-        <select name="style_id">
-          {% for s in styles %}<option value="{{ s.id }}">{{ s.name }}</option>{% endfor %}
+        <select name="style_id" id="style-select">
+          {% for s in styles %}<option value="{{ s.id }}" data-missing="{{ (missing_by_style.get(s.id) or []) | join(',') }}">{{ s.name }}</option>{% endfor %}
         </select>
       </label>
+      <p id="lora-warning" class="hint hint-yellow" hidden></p>
       <label>角色
         <select name="character_id">
           {% for c in characters %}<option value="{{ c.character_id }}">{{ c.name }}</option>{% endfor %}

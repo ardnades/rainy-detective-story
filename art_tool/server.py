@@ -95,6 +95,34 @@ def _health_to_dict(health: comfy_client.ComfyHealth) -> dict:
     }
 
 
+def _lora_status(health: comfy_client.ComfyHealth) -> dict:
+    """彙整各畫風需要的 LoRA 與 ComfyUI 實際可用清單，算出 found / missing。
+
+    缺 LoRA 不影響 can_generate（非阻擋），僅供 UI 黃字提示「畫風可能不像」。
+    """
+    available: list[str] = []
+    if getattr(health, "online", False) and getattr(health, "url", None):
+        available, _ = comfy_client.get_loras(health.url)
+    required: set = set()
+    by_style: list[dict] = []
+    for s in _styles():
+        items = []
+        for lora in (s.get("loras") or []):
+            name = lora.get("name") if isinstance(lora, dict) else None
+            if not name:
+                continue
+            required.add(name)
+            items.append({"name": name, "found": name in available})
+        if items:
+            by_style.append({
+                "id": s.get("id"), "name": s.get("name"), "loras": items,
+                "missing": [it["name"] for it in items if not it["found"]],
+            })
+    missing = sorted(n for n in required if n not in available)
+    return {"available": available, "required": sorted(required),
+            "missing": missing, "by_style": by_style}
+
+
 # =====================================================================
 # Routes
 # =====================================================================
@@ -113,6 +141,7 @@ def art_studio(request: Request):
         health.online and health.system_ok and health.queue_ok
         and health.checkpoints_ok and workflow_loaded
     )
+    lora_status = _lora_status(health)
 
     context = {
         "mode_label": MODE_LABEL,
@@ -133,6 +162,8 @@ def art_studio(request: Request):
         "batch_max": BATCH_MAX,
         "dim_min": DIM_MIN,
         "dim_max": DIM_MAX,
+        "lora_status": lora_status,
+        "missing_by_style": {b["id"]: b["missing"] for b in lora_status["by_style"]},
     }
     return templates.TemplateResponse(request, "art_studio.html.j2", context)
 
@@ -450,4 +481,6 @@ def api_diagnostics() -> JSONResponse:
             "adopted_count": len(adopted),
             "active_jobs": len(generation_service.JOBS),
         },
+        # LoRA：available / required / missing / by_style。缺 LoRA 不影響 can_generate。
+        "loras": _lora_status(health),
     })

@@ -184,6 +184,41 @@ def get_checkpoints(url: str, *, http_get: HttpGet = _default_http_get,
     return [], warnings
 
 
+def get_loras(url: str, *, http_get: HttpGet = _default_http_get,
+              timeout: float = DEFAULT_TIMEOUT) -> tuple[list[str], list[str]]:
+    """回 (loras, warnings)。
+
+    1. 先試 GET /models/loras（回 list[str]）。
+    2. 取不到 → fallback 解析 /object_info/LoraLoader 的 lora_name 清單。
+    3. 兩者都不行 → 回 ([], warnings)，不 crash。空 LoRA 是合法狀態。
+    """
+    base = url.rstrip("/")
+    warnings: list[str] = []
+
+    data, err = _safe_get_json(http_get, f"{base}/models/loras", timeout=timeout)
+    if err:
+        warnings.append(f"/models/loras 取得失敗：{err}")
+    elif isinstance(data, list):
+        return [x for x in data if isinstance(x, str)], warnings
+    elif data is not None:
+        warnings.append("/models/loras 回應格式非預期（非 list）")
+
+    data2, err2 = _safe_get_json(
+        http_get, f"{base}/object_info/LoraLoader", timeout=timeout)
+    if err2:
+        warnings.append(f"/object_info/LoraLoader 取得失敗：{err2}")
+        return [], warnings
+    try:
+        names = data2["LoraLoader"]["input"]["required"]["lora_name"][0]
+    except (KeyError, TypeError, IndexError) as exc:
+        warnings.append(f"/object_info lora_name 解析失敗：{exc}")
+        return [], warnings
+    if isinstance(names, list):
+        return [x for x in names if isinstance(x, str)], warnings
+    warnings.append("/object_info lora_name 格式非預期")
+    return [], warnings
+
+
 def _parse_system_stats(data) -> tuple[Optional[str], Optional[int], Optional[int]]:
     if not isinstance(data, dict):
         return None, None, None
@@ -300,6 +335,66 @@ def _link_node_id(link) -> Optional[str]:
     return None
 
 
+def _inject_loras(wf, ksid, ks, pos_id, neg_id, loras, available_loras) -> tuple[list[str], list[str]]:
+    """在 model/clip 來源與 KSampler/CLIPTextEncode 之間動態串接 0～N 個 LoraLoader。
+
+    - 只注入存在於 available_loras 的 LoRA；不存在的 skip + warning（不讓生成失敗）。
+    - available_loras 為 None 時不做存在性過濾（注入全部，供單元測試）。
+    - 0 個有效 LoRA → 不動 workflow（行為與無 LoRA 一致）。
+    回 (patched, warnings)。
+    """
+    patched: list[str] = []
+    warnings: list[str] = []
+    if not loras or not isinstance(ks, dict):
+        return patched, warnings
+
+    model_link = ks.get("inputs", {}).get("model")
+    pos_node = wf.get(pos_id) if pos_id else None
+    neg_node = wf.get(neg_id) if neg_id else None
+    clip_link = None
+    for node in (pos_node, neg_node):
+        if isinstance(node, dict) and isinstance(node.get("inputs"), dict) and "clip" in node["inputs"]:
+            clip_link = node["inputs"]["clip"]
+            break
+    if model_link is None or clip_link is None:
+        warnings.append("LoRA 注入略過：找不到 model/clip 來源連線。")
+        return patched, warnings
+
+    prev_model, prev_clip = model_link, clip_link
+    injected = 0
+    for lora in loras:
+        if not isinstance(lora, dict):
+            continue
+        name = lora.get("name")
+        if not name:
+            warnings.append("LoRA 條目缺少 name，已略過。")
+            continue
+        if available_loras is not None and name not in available_loras:
+            warnings.append(f"LoRA 缺失，已略過：{name}（不在 ComfyUI loras 清單，畫風可能不像）")
+            continue
+        nid = f"lora_{injected}"
+        wf[nid] = {
+            "class_type": "LoraLoader",
+            "inputs": {
+                "model": prev_model,
+                "clip": prev_clip,
+                "lora_name": name,
+                "strength_model": lora.get("strength_model", 1.0),
+                "strength_clip": lora.get("strength_clip", 1.0),
+            },
+        }
+        prev_model, prev_clip = [nid, 0], [nid, 1]
+        patched.append(f"{nid}:lora({name})")
+        injected += 1
+
+    if injected > 0:
+        ks["inputs"]["model"] = prev_model
+        for node in (pos_node, neg_node):
+            if isinstance(node, dict) and isinstance(node.get("inputs"), dict) and "clip" in node["inputs"]:
+                node["inputs"]["clip"] = prev_clip
+    return patched, warnings
+
+
 def patch_workflow(
     workflow: Optional[dict],
     *,
@@ -313,6 +408,8 @@ def patch_workflow(
     cfg: float,
     sampler: str,
     scheduler: str,
+    loras: Optional[list] = None,
+    available_loras: Optional[list] = None,
 ) -> WorkflowPatchResult:
     """對 base_txt2img_api.json 做最小 patch。找不到 patch 點不 silent fail。"""
     if not isinstance(workflow, dict):
@@ -395,13 +492,20 @@ def patch_workflow(
     else:
         missing.append("width/height（EmptyLatentImage）")
 
+    # 6. LoRA：動態注入（缺失 skip + warning，不算 patch 失敗）
+    lora_patched, lora_warnings = _inject_loras(
+        wf, ksid, ks, pos_id, neg_id, loras or [], available_loras)
+    patched.extend(lora_patched)
+    for w in lora_warnings:
+        _warn(w)
+
     ok = not missing
     if ok:
         message = f"patch 成功，共更新 {len(patched)} 個欄位。"
-        warnings: list[str] = []
+        warnings: list[str] = list(lora_warnings)
     else:
         message = "部分 patch 點找不到：" + "；".join(missing)
-        warnings = list(missing)
+        warnings = list(missing) + list(lora_warnings)
         for m in missing:
             _warn(f"patch 點缺失：{m}")
 
