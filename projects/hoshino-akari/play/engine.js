@@ -103,10 +103,20 @@
     $("textbox").style.visibility = "visible";
   }
 
+  // 場景轉換（輕量）：背景柔順 crossfade ＋ 上方淡入一條地點時間膠囊標籤，不蓋全板、不藏文字框。
+  // （換日 showDayCard 才用全板大卡，兩者明顯區隔。）
   async function showScene(node) {
     clearCG(); setExpr("");
     if (node.mood) setMood(node.mood);
-    await fadeCard(`${node.time ? `<div class="sc-time">${node.time}</div>` : ""}<div class="sc-rule"></div><div class="sc-place">${node.place || ""}</div><div class="sc-rule"></div>`, 1500);
+    const el = $("sceneTag");
+    if (!el) return;
+    el.innerHTML = `${node.time ? `<span class="st-time">${node.time}</span>` : ""}<span class="st-place">${node.place || ""}</span>`;
+    $("speaker").classList.add("hidden"); $("dialogue").textContent = ""; $("advanceHint").classList.remove("show");
+    el.classList.remove("hidden"); void el.offsetWidth; el.classList.add("show");   // 淡入＋微微下滑歸位
+    await Promise.race([delay(skipMode ? 4 : 1400), waitAdvance(0)]);
+    el.classList.remove("show");                                                     // 柔和淡出
+    await delay(skipMode ? 4 : 460);
+    el.classList.add("hidden");
   }
 
   // 章節卡（Day Start／Day End）。標題缺省時仍可運作（只顯示 Day 編號）
@@ -375,7 +385,7 @@
     $("btnMenu").onclick = openMenu;
     $("mResume").onclick = closeMenu;
     $("mGallery").onclick = () => { closeMenu(); openGallery(); };
-    $("mRestartDay").onclick = () => { closeMenu(); const sv = JSON.parse(localStorage.getItem(SAVE)); state.scores = { ...sv.scores }; state.flags = { ...sv.flags }; runDay(state.day); };
+    $("mRestartDay").onclick = () => { closeMenu(); const sv = JSON.parse(localStorage.getItem(SAVE) || "null") || { scores: state.scores, flags: state.flags }; state.scores = { ...sv.scores }; state.flags = { ...sv.flags }; runDay(state.day); };
     $("mTitle").onclick = () => location.reload();
     $("dbgChk").onchange = (e) => { $("dbgPanel").classList.toggle("hidden", !e.target.checked); refreshDbg(); };
 
