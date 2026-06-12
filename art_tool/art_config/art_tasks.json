@@ -49,8 +49,8 @@
     {
       "id": "key_visual_portrait",
       "name": "插畫風格研究 / 主視覺草案",
-      "prompt_suffix": "full body, full body illustration, complete figure from head to feet, seated on the floor, knees drawn up, legs and feet fully drawn and detailed, holding a fountain pen, looking at viewer, key visual illustration, single character",
-      "extra_negative": "multiple people, plain reference sheet, headshot only, group, cropped at waist, cut off legs, cut off feet, unfinished legs, blank legs",
+      "prompt_suffix": "closer crop, cropped composition, not full body, face and cap larger in frame, upper body leaning forward toward viewer, knees in foreground, holding a fountain pen, looking at viewer, intimate close framing, key visual illustration, single character",
+      "extra_negative": "multiple people, group, full body character sheet, full body pose, plain sitting pose, feet focus, legs focus, foot close-up, reference sheet, headshot only",
       "width": 896,
       "height": 1344,
       "output_kind": "character"
