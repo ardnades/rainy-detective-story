@@ -43,6 +43,6 @@ art.js            全 inline SVG 手繪貓/道具/暗號/結局徽記
 data/meta.js      角色、四分數、結局判定、每日標題(meta.days)、圖鑑定義
 data/assets.js    素材 manifest（未來替換點；目前全空→fallback）
 data/chapters.js  每日 intro/outro
-data/day1-7.js    各日劇本節點（對白逐字沿用 episodes/）
+data/day1-7.js    各日劇本節點（對白沿用 episodes/，僅「便利商店」用語統一；旁白經冰山化改寫，以此處為演出正典）
 data/endings.js   四結局後日談
 ```

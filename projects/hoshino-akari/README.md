@@ -20,6 +20,10 @@
 | `episodes/day3.md` | Day3 新稿 |
 | `episodes/day4.md` | Day4 定稿（轉折日：外部壓力初現） |
 | `episodes/day5.md` | Day5 定稿（不見面的一天：貓圖暗號） |
+| `episodes/day6.md` | Day6 定稿（商店街雨棚：不能被看成一組人） |
+| `episodes/day7.md` | Day7 定稿（17:40 的道別＋後日談） |
+
+> 注意：`play/data/day1-7.js` 的旁白已另行做過冰山化改寫（刪反應標籤句、壓短說明句），與 episodes/ 草稿不再逐字一致。演出文本以 `play/data/` 為正典，episodes/ 保留為劇本源稿。
 
 ## 一句話定位
 
