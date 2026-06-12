@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>星野灯線 —— 凌晨一點的便利店</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+
+  <!-- 標題畫面 -->
+  <section id="title" class="screen">
+    <div class="title-art" id="titleArt"></div>
+    <h1>星野灯線</h1>
+    <p class="subtitle">凌晨一點的便利店</p>
+    <div class="title-menu">
+      <button id="btnStart">開始遊戲</button>
+      <button id="btnContinue">繼續（第 <span id="contDay">1</span> 天）</button>
+      <button id="btnGallery">回想室</button>
+    </div>
+    <p class="title-note">含虛構角色。全角色 18 歲以上。<br>本作為非營利同人試玩版。</p>
+  </section>
+
+  <!-- 遊戲畫面 -->
+  <section id="game" class="screen hidden">
+    <div id="topbar">
+      <button id="btnMenu" title="選單">≡</button>
+      <span id="dayTag">Day 1</span>
+      <div class="top-right">
+        <button id="btnAuto" title="自動播放">▶ 自動</button>
+        <button id="btnSkip" title="快進已讀">» 快進</button>
+        <button id="btnGalleryG" title="回想室">圖鑑</button>
+      </div>
+    </div>
+
+    <div id="stage">
+      <div id="moodbg"></div>
+      <div id="cgLayer" class="hidden"></div>
+      <div id="sceneCard" class="hidden"></div>
+      <div id="snsLayer" class="hidden"></div>
+      <div id="exprBadge" class="hidden"></div>
+      <div id="seFlash"></div>
+    </div>
+
+    <div id="textbox">
+      <div id="speaker" class="hidden"></div>
+      <div id="dialogue"></div>
+      <div id="advanceHint">▼</div>
+    </div>
+
+    <div id="choices" class="hidden"></div>
+
+    <!-- 選單彈窗 -->
+    <div id="menuModal" class="modal hidden">
+      <div class="modal-box">
+        <h3>選單</h3>
+        <button id="mResume">回到遊戲</button>
+        <button id="mGallery">回想室</button>
+        <button id="mRestartDay">重玩本日</button>
+        <button id="mTitle">回標題</button>
+        <label class="dbg-toggle"><input type="checkbox" id="dbgChk"> 開發者模式（顯示數值・跳天）</label>
+        <div id="dbgPanel" class="hidden"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 回想室 -->
+  <section id="gallery" class="screen hidden">
+    <div id="topbar">
+      <button id="gBack">← 返回</button>
+      <span>回想室</span>
+      <div class="top-right"></div>
+    </div>
+    <div class="gal-section"><h3>結局徽記</h3><div id="galEndings" class="gal-grid"></div></div>
+    <div class="gal-section"><h3>四記憶錨點</h3><div id="galAnchors" class="gal-grid"></div></div>
+    <div class="gal-section"><h3>貓圖暗號圖鑑</h3><div id="galSigns" class="gal-grid"></div></div>
+    <div class="gal-section"><h3>隱藏</h3><div id="galHidden" class="gal-grid"></div></div>
+    <div id="galView" class="modal hidden"><div class="modal-box gal-view-box"><div id="galViewArt"></div><p id="galViewText"></p><button id="galViewClose">關閉</button></div></div>
+  </section>
+
+</div>
+
+<!-- 資料 -->
+<script src="art.js"></script>
+<script src="data/meta.js"></script>
+<script src="data/day1.js"></script>
+<script src="data/day2.js"></script>
+<script src="data/day3.js"></script>
+<script src="data/day4.js"></script>
+<script src="data/day5.js"></script>
+<script src="data/day6.js"></script>
+<script src="data/day7.js"></script>
+<script src="data/endings.js"></script>
+<script src="engine.js"></script>
+</body>
+</html>

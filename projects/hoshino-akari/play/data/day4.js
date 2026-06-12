@@ -1,0 +1,345 @@
+/* Day4 —— 赴約的代價（貼文升級・停車場販賣機） */
+window.HOSHINO.days[4] = [
+  /* ───── 白天・公司：推薦欄的數字 ───── */
+  { type: "scene", place: "白天・公司", time: "午休", mood: "warm" },
+
+  { type: "line", who: "narration", text: "午休，我滑開手機。", bgm: "warm" },
+  { type: "line", who: "narration", text: "推薦欄裡，一個娛樂帳號轉貼了昨晚那張模糊照片。" },
+  {
+    type: "line", who: "narration", text: "", ui: "sns",
+    sns: {
+      title: "星野灯？深夜目擊情報",
+      posts: [
+        { acct: "娛樂帳號", text: "星野灯？深夜目擊情報", num: "轉貼數，比昨晚多了一位數" },
+        { acct: "留言", text: "這是不是她住的飯店附近？", reply: true },
+        { acct: "留言", text: "看路燈很像江東區那邊。", reply: true },
+        { acct: "留言", text: "她最近不是在拍寫真？", reply: true },
+        { acct: "留言", text: "又是炒作吧。", reply: true },
+      ],
+    },
+    se: "count",
+  },
+  { type: "line", who: "narration", text: "轉貼數，比昨晚多了一位數。" },
+  { type: "line", who: "narration", text: "留言開始猜地點。", speed: "instant" },
+  { type: "line", who: "narration", text: "沒有人說出正確地點。", pause: 0.8 },
+  { type: "line", who: "narration", text: "……還沒有。", speed: "slow" },
+  { type: "line", who: "narration", text: "我關掉螢幕。", screen: "black", pause: 0.5 },
+  { type: "line", who: "narration", text: "下午，又點開了一次。", pause: 1.0 },
+  { type: "line", who: "narration", text: "跟上午一模一樣的動作。", pause: 1.2 },
+
+  {
+    type: "choice", id: "d4s1",
+    prompt: "那則貼文——",
+    options: [
+      {
+        label: "「把這則貼文，收進更深的地方記著。」", _dbg: "awareness +1",
+        add: { awareness: 1 },
+        reaction: [
+          { type: "line", who: "narration", text: "我把它收進更深的地方記著。" },
+          { type: "line", who: "narration", text: "照片糊，但他們在比對路口。下次我站的位置要換。", speed: "slow" },
+        ],
+      },
+      {
+        label: "「沒多想，滑掉。」", _dbg: "+0",
+        reaction: [
+          { type: "line", who: "narration", text: "我沒多想，滑掉。" },
+          { type: "line", who: "narration", text: "反正照片很糊。" },
+        ],
+      },
+    ],
+  },
+
+  /* ───── 深夜・公司門口：去，還是不去 ───── */
+  { type: "scene", place: "深夜・公司門口", time: "零點四十分", mood: "night" },
+
+  { type: "line", who: "narration", text: "零點四十分。", bgm: "night" },
+  { type: "line", who: "narration", text: "加班結束。" },
+  { type: "line", who: "narration", text: "公司就在便利店兩條街外。" },
+  { type: "line", who: "narration", text: "凌晨一點的便利店，本來只是加班後的終點。" },
+  { type: "line", who: "narration", text: "不知道什麼時候，變成了另一件事的起點。" },
+  { type: "line", who: "narration", text: "今天，我在門口站了一下。", pause: 0.8 },
+  { type: "line", who: "narration", text: "去，還是不去。", speed: "slow", pause: 1.5 },
+  { type: "line", who: "narration", text: "去了，萬一有人跟著她——" },
+  { type: "line", who: "narration", text: "我就會變成「目擊情報」的一部分。" },
+  { type: "line", who: "narration", text: "不去的話。" },
+  { type: "line", who: "narration", text: "如果她還是來了呢？" },
+  { type: "line", who: "narration", text: "一個人，站在那條巷子裡。", pause: 1.0, bgm: "stop" },
+
+  {
+    type: "choice", id: "d4s2",
+    prompt: "我的腳——",
+    options: [
+      {
+        label: "「邁開腳步，和平常一樣的方向。」", _dbg: "+0",
+        reaction: [
+          { type: "line", who: "narration", text: "……我邁開腳步。", se: "step" },
+          { type: "line", who: "narration", text: "和平常一樣的方向。" },
+        ],
+      },
+      {
+        label: "「在門口，猶豫了很久才走。」", _dbg: "distance +1",
+        add: { distance: 1 },
+        reaction: [
+          { type: "line", who: "narration", text: "我在門口，猶豫了很久。" },
+          { type: "line", who: "narration", text: "我只是去確認她有沒有來。確認完就回家。", speed: "slow" },
+          { type: "line", who: "narration", text: "我替這趟路，先想好了結束的方式。", pause: 0.6, se: "step" },
+        ],
+      },
+    ],
+  },
+
+  /* ───── 深夜・便利商店 後巷：繞遠路的貓 ───── */
+  { type: "scene", place: "深夜・便利商店 後巷", time: "一點零五分", mood: "night" },
+
+  { type: "line", who: "narration", text: "風比昨天更冷。", bgm: "night" },
+  { type: "line", who: "narration", text: "我把手插進口袋。" },
+  { type: "line", who: "narration", text: "指尖碰到那支護唇膏的外殼。" },
+  { type: "line", who: "narration", text: "一點零五分。", speed: "slow" },
+  { type: "line", who: "narration", text: "沒有人。", pause: 1.0 },
+  { type: "line", who: "narration", text: "一點十五分。", speed: "slow" },
+  { type: "line", who: "narration", text: "還是沒有人。", pause: 1.0 },
+  { type: "line", who: "narration", text: "前三天，她從來沒有這麼晚。" },
+  { type: "line", who: "narration", text: "一點二十三分。", speed: "slow" },
+  { type: "line", who: "narration", text: "我盯著巷口。" },
+  { type: "line", who: "narration", text: "今天，連貓都沒有。", pause: 1.5 },
+  { type: "line", who: "narration", text: "腳步聲。", se: "rush", pause: 0.6 },
+  { type: "line", who: "narration", text: "她從巷子另一頭出現。", expr: "喘氣帽簷低" },
+  { type: "line", who: "narration", text: "不是平常的方向。" },
+  { type: "line", who: "narration", text: "圍巾是歪的。" },
+  { type: "line", who: "narration", text: "帽簷下，呼吸有點急。" },
+  { type: "line", who: "narration", text: "白氣一團接一團。" },
+  { type: "line", who: "akari", text: "「……今天的貓，」她扶著牆，喘了兩口，「繞遠路了。」" },
+  { type: "line", who: "me", text: "「繞了多遠？」" },
+  { type: "line", who: "akari", text: "「三條街。」她比了個三，「外加一個地下道。」" },
+  { type: "line", who: "me", text: "「為什麼——」", speed: "instant" },
+  { type: "line", who: "akari", text: "「別露出那種臉。」她打斷我，「我沒被抓。」", speed: "instant", expr: "直起身嘴硬" },
+  { type: "line", who: "narration", text: "她直起身，拍了拍連帽衣。" },
+  { type: "line", who: "akari", text: "「只是最近，路上的眼睛有點多。」", speed: "slow" },
+  { type: "line", who: "narration", text: "她看了一眼便利店的玻璃門。", expr: "看玻璃門眼神警戒" },
+  { type: "line", who: "narration", text: "今天，她沒有說要進去。" },
+  { type: "line", who: "akari", text: "「後面。」她朝店的另一側抬了下下巴。" },
+  { type: "line", who: "me", text: "「後面？」" },
+  { type: "line", who: "akari", text: "「停車場那邊有販賣機。」她把手插回口袋，「偵察成果。」" },
+
+  /* ───── 深夜・停車場：熱可可與布丁 ───── */
+  { type: "scene", place: "深夜・便利商店後方 停車場", time: "一點二十五分", mood: "store" },
+
+  { type: "line", who: "narration", text: "停車場的盡頭。", bgm: "store" },
+  { type: "line", who: "narration", text: "一排自動販賣機，旁邊一張塑膠長椅。" },
+  { type: "line", who: "narration", text: "地上是停車格褪色的白線。" },
+  { type: "line", who: "narration", text: "從店裡看不到這裡。" },
+  { type: "line", who: "narration", text: "但只要走十步，就能回到那片白亮的燈光下。" },
+  { type: "line", who: "narration", text: "她選位置的眼光，比我想的還要好。", pause: 0.6 },
+  {
+    type: "line", who: "narration",
+    text: "我在販賣機投了兩罐熱可可。", se: "give",
+    cg: "cocoa", set: { cocoa_memory: true },
+  },
+  { type: "line", who: "narration", text: "咚。咚。", se: "bump" },
+  { type: "line", who: "narration", text: "她接過罐子，沒有開。", cg: "clear", expr: "貼罐子放鬆" },
+  { type: "line", who: "narration", text: "先貼在臉頰上。" },
+  { type: "line", who: "akari", text: "「……活過來了。」" },
+  { type: "line", who: "narration", text: "塑膠長椅冰得像鐵板。" },
+  { type: "line", who: "narration", text: "她從口袋掏出一個東西，晃了晃。" },
+  { type: "line", who: "narration", text: "昨天那個暖暖包。" },
+  { type: "line", who: "akari", text: "「涼了。」她說，「但丟掉又可惜。」" },
+  { type: "line", who: "narration", text: "她把它墊在長椅上，坐上去。" },
+  { type: "line", who: "akari", text: "「……完全沒用。」" },
+  { type: "line", who: "me", text: "「那現在是坐墊嗎。」" },
+  { type: "line", who: "akari", text: "「現在是了。」" },
+  { type: "line", who: "narration", text: "她捧著罐子，看著停車格的白線，忽然開口。", expr: "看白線出神" },
+  { type: "line", who: "akari", text: "「七天。」" },
+  { type: "line", who: "me", text: "「什麼七天？」" },
+  { type: "line", who: "akari", text: "「這次的工作。」她說，「都排在附近的攝影棚，到週日。」" },
+  { type: "line", who: "akari", text: "「住的地方也是公司訂的。」" },
+  { type: "line", who: "narration", text: "她聳聳肩。" },
+  { type: "line", who: "akari", text: "「所以我是觀光客。", pause: 0.8 },
+  { type: "line", who: "akari", text: "期間限定的那種。」", speed: "slow" },
+  { type: "line", who: "narration", text: "我沒接話。", pause: 1.2 },
+  { type: "line", who: "narration", text: "心裡卻自動算了一下。" },
+  { type: "line", who: "narration", text: "到週日。" },
+  { type: "line", who: "narration", text: "……還剩三天。", speed: "slow" },
+  { type: "line", who: "narration", text: "她從另一邊口袋，掏出那個焦糖布丁。" },
+  { type: "line", who: "narration", text: "放了一天的布丁。" },
+  { type: "line", who: "narration", text: "她用兩隻手捧著。" },
+  { type: "line", who: "akari", text: "「本來想留到今天當理由。」她說。" },
+  { type: "line", who: "akari", text: "「結果真的變成理由了。」" },
+  { type: "line", who: "narration", text: "她撕蓋子。", expr: "凍手撕蓋" },
+  { type: "line", who: "narration", text: "撕了兩次，都沒撕開。", se: "pat" },
+  { type: "line", who: "narration", text: "手指凍僵了。" },
+  { type: "line", who: "akari", text: "「借我。」" },
+  { type: "line", who: "narration", text: "我接過來，撕開，還給她。", cg: "pudding", se: "give" },
+  { type: "line", who: "akari", text: "「……哼。」她接回去，「算你有用。」", cg: "clear", expr: "嘴硬被逗" },
+  { type: "line", who: "narration", text: "她用附的小湯匙，挖了一小口。" },
+  { type: "line", who: "narration", text: "很慢地吃。", speed: "slow" },
+  { type: "line", who: "narration", text: "像在吃什麼很貴的東西。" },
+  { type: "line", who: "narration", text: "手機在她口袋裡震了。", se: "rush" },
+  { type: "line", who: "narration", text: "她的動作停了半秒。", expr: "動作凝滯", pause: 0.6 },
+  { type: "line", who: "narration", text: "掏出來，看了一眼螢幕。" },
+  { type: "line", who: "narration", text: "沒接。" },
+  {
+    type: "line", who: "narration", text: "反扣在長椅上。",
+    set: { unread_message_flag: true },
+  },
+  { type: "line", who: "narration", text: "過了一會。" },
+  { type: "line", who: "narration", text: "又震。", se: "rush" },
+  { type: "line", who: "narration", text: "她看著販賣機的燈，笑了一下。", expr: "" },
+  { type: "line", who: "akari", text: "「今天好熱鬧。」" },
+  { type: "line", who: "me", text: "「妳不回？」" },
+  { type: "line", who: "akari", text: "「回了，就要回去。」" },
+  { type: "line", who: "narration", text: "她又挖了一口布丁。" },
+
+  {
+    type: "choice", id: "d4s4",
+    prompt: "手機又震了——",
+    options: [
+      {
+        label: "「不接也可以。」", _dbg: "affection +1",
+        add: { affection: 1 },
+        reaction: [
+          { type: "line", who: "me", text: "「不接也可以。」" },
+          { type: "line", who: "narration", text: "她愣了一下。" },
+          { type: "line", who: "narration", text: "轉頭看我。" },
+          { type: "line", who: "akari", text: "「……你這人，很會讓人變壞。」" },
+          { type: "line", who: "me", text: "「我只是說可以。」" },
+          { type: "line", who: "akari", text: "「對。」她把布丁挖了一大口，「所以很壞。」", expr: "嘴硬被逗" },
+        ],
+      },
+      {
+        label: "「不急的話，再吃一會。」", _dbg: "+0",
+        reaction: [
+          { type: "line", who: "me", text: "「不急的話，再吃一會。」" },
+          { type: "line", who: "narration", text: "她的湯匙停在半空。" },
+          { type: "line", who: "narration", text: "沉默了幾秒。", pause: 0.6 },
+          { type: "line", who: "akari", text: "「……我知道不急。」", expr: "低頭聲音小" },
+          { type: "line", who: "narration", text: "聲音有點小。" },
+          { type: "line", who: "narration", text: "她低下頭，把那口布丁吃掉了。" },
+        ],
+      },
+    ],
+  },
+
+  /* ───── 停車場：想吃什麼（匯合後） ───── */
+  { type: "line", who: "narration", text: "手機不震了。" },
+  { type: "line", who: "narration", text: "停車場安靜下來，只剩販賣機的運轉聲。" },
+  { type: "line", who: "narration", text: "她吃到底層的焦糖，瞇起眼睛。", expr: "瞇眼吃焦糖" },
+  { type: "line", who: "akari", text: "「我不是想逃工作。」她忽然說。" },
+  { type: "line", who: "me", text: "「嗯。」" },
+  { type: "line", who: "akari", text: "「工作我可以做。跳舞、唱歌、笑，都可以。」" },
+  { type: "line", who: "narration", text: "她轉著手裡的湯匙。" },
+  { type: "line", who: "akari", text: "「我只是有時候，想確認自己還會想吃什麼。」", speed: "slow" },
+  { type: "line", who: "narration", text: "販賣機的光，落在她的睫毛上。", pause: 0.8 },
+
+  {
+    type: "choice", id: "d4s5",
+    prompt: "我看著她——",
+    options: [
+      {
+        label: "「今天想吃布丁？」", _dbg: "affection +1",
+        add: { affection: 1 },
+        reaction: [
+          { type: "line", who: "me", text: "「今天想吃布丁？」" },
+          { type: "line", who: "narration", text: "她點頭。" },
+          { type: "line", who: "narration", text: "點得很慢，很認真。" },
+          { type: "line", who: "narration", text: "像在承認一件很大的事。", expr: "認真點頭微笑" },
+          { type: "line", who: "akari", text: "「嗯。想吃。」" },
+          { type: "line", who: "me", text: "「然後呢？」" },
+          { type: "line", who: "akari", text: "「很好吃。」" },
+          { type: "line", who: "narration", text: "她說完自己笑了。" },
+          { type: "line", who: "akari", text: "「就這樣。很普通吧。」" },
+        ],
+      },
+      {
+        label: "「那明天想吃什麼？」", _dbg: "regret +1・set almost_confession_flag",
+        add: { regret: 1 }, flag: { almost_confession_flag: true },
+        reaction: [
+          { type: "line", who: "me", text: "「那明天想吃什麼？」" },
+          { type: "line", who: "narration", text: "她抬頭看我。" },
+          { type: "line", who: "narration", text: "停了一下。", pause: 0.6 },
+          { type: "line", who: "akari", text: "「……你問得太早了。」", expr: "耳朵紅低頭" },
+          { type: "line", who: "narration", text: "她低下頭，又挖了一口。" },
+          { type: "line", who: "narration", text: "但我看見，帽簷下的耳朵有點紅。" },
+          { type: "line", who: "narration", text: "不知道是凍的，還是別的。" },
+        ],
+      },
+    ],
+  },
+
+  /* ───── 停車場：告別三連 Hook ───── */
+  { type: "line", who: "narration", text: "她把最後一口吃完。" },
+  { type: "line", who: "narration", text: "把空盒子收好，起身丟進販賣機旁的垃圾桶。" },
+  { type: "line", who: "narration", text: "動作很乾脆。" },
+  { type: "line", who: "narration", text: "走回來的時候，手機又震了。", se: "rush" },
+  { type: "line", who: "narration", text: "這次，她盯著螢幕看了很久。", expr: "看螢幕凝重", pause: 2.0 },
+  { type: "line", who: "narration", text: "久到熱可可的白氣都散了。" },
+  { type: "line", who: "narration", text: "然後她把手機收起來。" },
+  { type: "line", who: "akari", text: "「明天，我可能來不了。」", bgm: "night" },
+  { type: "line", who: "narration", text: "我沒說話。", pause: 1.0 },
+  { type: "line", who: "akari", text: "「我是說，可能。」她立刻補，「貓的行程很難懂。」" },
+  { type: "line", who: "me", text: "「嗯。」" },
+  { type: "line", who: "akari", text: "「不要『嗯』。」她瞪我，「你應該說『喔，是喔』，然後明天照常來站二十分鐘。」" },
+  { type: "line", who: "me", text: "「……那很蠢。」" },
+  { type: "line", who: "akari", text: "「對。」她點頭，「但你前三天都是這樣的。」" },
+  { type: "line", who: "narration", text: "我無話可說。" },
+  { type: "line", who: "narration", text: "她轉身往巷口走。" },
+  { type: "line", who: "narration", text: "走了幾步，回頭。", expr: "回頭半側臉" },
+  { type: "line", who: "akari", text: "「如果我沒來——」" },
+  { type: "line", who: "narration", text: "她頓了一下。", pause: 0.8 },
+  { type: "line", who: "akari", text: "「護唇膏，先別丟。」" },
+  { type: "line", who: "me", text: "「為什麼？」" },
+  {
+    type: "line", who: "akari", text: "「因為我還沒說不要了。」", pause: 1.5,
+    add: { regret: 1 },
+    set: { vending_machine_memory: true, unread_message_flag: true },
+  },
+  { type: "line", who: "narration", text: "她說完，拉低帽子，走進黑暗裡。", se: "step" },
+  { type: "line", who: "narration", text: "這次，她的背影走得比哪一天都慢。", expr: "" },
+
+  /* regret>=1 → 追加「我數到三，沒有叫住她。」 */
+  {
+    type: "gate", cond: "regret>=1",
+    then: [
+      { type: "line", who: "narration", text: "我數到三，沒有叫住她。", speed: "slow", pause: 1.5 },
+    ],
+  },
+
+  /* ───── 回家・深夜：貼文再升級與收抽屜 ───── */
+  { type: "scene", place: "回家・深夜", time: "深夜", mood: "night" },
+
+  { type: "line", who: "narration", text: "我躺在床上，滑開手機。", bgm: "night" },
+  { type: "line", who: "narration", text: "推薦欄裡，那則目擊貼文又被轉了一次。" },
+  { type: "line", who: "narration", text: "標題多了幾個字。" },
+  {
+    type: "line", who: "narration", text: "", ui: "sns",
+    sns: {
+      title: "星野灯？深夜目擊，飯店附近？",
+      posts: [
+        { acct: "娛樂帳號", text: "星野灯？深夜目擊，飯店附近？", num: "又被轉了一次" },
+        { acct: "留言", text: "比對一下街燈的反光，這招牌……", reply: true },
+        { acct: "留言", text: "路面反光的角度，像不像那條街？", reply: true },
+      ],
+    },
+    se: "count",
+  },
+  { type: "line", who: "narration", text: "留言裡，有人開始比對街燈、招牌、路面的反光。" },
+  { type: "line", who: "narration", text: "還沒有人說出那間便利店的名字。" },
+  { type: "line", who: "narration", text: "但已經很近了。", speed: "slow", pause: 1.0 },
+  { type: "line", who: "narration", text: "我關掉螢幕，看向桌上。", screen: "black" },
+  { type: "line", who: "narration", text: "那支護唇膏，立在檯燈下。", cg: "lipbalm" },
+
+  /* distance>=2 → 冷版；else → 原版 */
+  {
+    type: "gate", cond: "distance>=2",
+    then: [
+      { type: "line", who: "narration", text: "我起身，把它收進抽屜最裡面。", se: "give", cg: "clear", bgm: "stop" },
+      { type: "line", who: "narration", text: "像藏一個，不能被任何人發現的東西。", speed: "slow" },
+      { type: "line", who: "narration", text: "包括我自己。", speed: "slow", pause: 1.0 },
+    ],
+    else: [
+      { type: "line", who: "narration", text: "我起身，把它收進抽屜最裡面。", se: "give", cg: "clear" },
+      { type: "line", who: "narration", text: "像藏一個，不能被任何人發現的東西。", speed: "slow", pause: 1.0 },
+    ],
+  },
+
+  { type: "line", who: "narration", text: "窗外，風聲很大。", pause: 1.5 },
+];
