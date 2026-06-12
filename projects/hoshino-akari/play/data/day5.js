@@ -3,7 +3,7 @@ window.HOSHINO.days[5] = [
   /* ── D5-S1：午休・決定要不要去 ── */
   { type: "scene", place: "白天・公司", time: "午休", mood: "store" },
 
-  { type: "line", who: "narration", text: "午休，我又點開那則貼文。", bgm: "rain" },
+  { type: "line", who: "narration", text: "我又點開那則貼文。", bgm: "rain" },
   { type: "line", who: "narration", text: "轉貼還在增加。" },
   { type: "line", who: "narration", text: "留言更多了。", se: "buzz" },
   {

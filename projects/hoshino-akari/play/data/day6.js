@@ -4,7 +4,7 @@ window.HOSHINO.days[6] = [
   { type: "scene", place: "白天・公司", time: "下午", mood: "rain" },
 
   { type: "line", who: "narration", text: "那張販賣機的照片，傳開了。", bgm: "rain", pause: 0.6 },
-  { type: "line", who: "narration", text: "下午，留言區終於出現那一句。" },
+  { type: "line", who: "narration", text: "留言區終於出現那一句。" },
 
   {
     type: "line", who: "narration", text: "我往下滑著推薦欄。", ui: "sns",

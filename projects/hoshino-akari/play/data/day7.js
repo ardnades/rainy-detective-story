@@ -32,7 +32,7 @@ window.HOSHINO.days[7] = [
   /* ── S2 傍晚・雨棚盡頭：工作車旁的十分鐘 ── */
   { type: "scene", place: "傍晚・商店街 雨棚盡頭", time: "傍晚 17:38", mood: "stop" },
 
-  { type: "line", who: "narration", text: "十七點三十八分。冬天的傍晚，黑得很快。", bgm: "stop" },
+  { type: "line", who: "narration", text: "冬天的傍晚，黑得很快。", bgm: "stop" },
   { type: "line", who: "narration", text: "商店街的鐵門，白天就拉著，到現在也沒開。雨棚一路延伸到盡頭，接上前面那條大路。" },
   { type: "line", who: "narration", text: "路燈和車燈，亮得有點刺眼。昨天，我們就是在這裡分開的。" },
   { type: "line", who: "narration", text: "我站在雨棚下，靠牆的一側。不擋路。" },

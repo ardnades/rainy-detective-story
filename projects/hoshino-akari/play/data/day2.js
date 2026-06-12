@@ -15,7 +15,7 @@ window.HOSHINO.days[2] = [
   /* ===== D2-S2　暗處的聲音 ===== */
   { type: "scene", place: "深夜・便利商店", time: "凌晨零點五十分", mood: "store" },
 
-  { type: "line", who: "narration", text: "凌晨零點五十分。推開門，暖氣撲到臉上。", bgm: "store" },
+  { type: "line", who: "narration", text: "推開門，暖氣撲到臉上。", bgm: "store" },
   { type: "line", who: "narration", text: "關東煮的湯氣，把玻璃霧出一片白。", se: "heater" },
   { type: "line", who: "narration", text: "我夾了竹輪、蘿蔔、蛋。手停在油豆腐上。最油的那塊。" },
   { type: "line", who: "me", text: "「……多買一塊也還好。」" },

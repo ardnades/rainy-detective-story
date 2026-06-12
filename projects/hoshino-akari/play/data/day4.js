@@ -3,7 +3,7 @@ window.HOSHINO.days[4] = [
   /* ───── 白天・公司：推薦欄的數字 ───── */
   { type: "scene", place: "白天・公司", time: "午休", mood: "warm" },
 
-  { type: "line", who: "narration", text: "午休，我滑開手機。", bgm: "warm" },
+  { type: "line", who: "narration", text: "我滑開手機。", bgm: "warm" },
   { type: "line", who: "narration", text: "推薦欄裡，一個娛樂帳號轉貼了昨晚那張模糊照片。" },
   {
     type: "line", who: "narration", text: "", ui: "sns",
@@ -52,8 +52,7 @@ window.HOSHINO.days[4] = [
   /* ───── 深夜・公司門口：去，還是不去 ───── */
   { type: "scene", place: "深夜・公司門口", time: "零點四十分", mood: "night" },
 
-  { type: "line", who: "narration", text: "零點四十分。", bgm: "night" },
-  { type: "line", who: "narration", text: "加班結束。" },
+  { type: "line", who: "narration", text: "加班結束。", bgm: "night" },
   { type: "line", who: "narration", text: "公司就在便利店兩條街外。" },
   { type: "line", who: "narration", text: "凌晨一點的便利店，本來只是加班後的終點。" },
   { type: "line", who: "narration", text: "不知道什麼時候，變成了另一件事的起點。" },

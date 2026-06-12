@@ -8,8 +8,7 @@ window.HOSHINO.days[3] = [
 
   // ── 深夜・便利商店前 ──
   { type: "scene", place: "深夜・便利商店 門口", time: "凌晨零點四十分", mood: "night" },
-  { type: "line", who: "narration", text: "凌晨零點四十分。", bgm: "night" },
-  { type: "line", who: "narration", text: "呼出的氣是白的。" },
+  { type: "line", who: "narration", text: "呼出的氣是白的。", bgm: "night" },
   { type: "line", who: "narration", text: "我比昨天早了十分鐘。" },
   { type: "line", who: "narration", text: "結果還是輸了。", speed: "slow", pause: 0.8 },
   { type: "line", who: "narration", text: "便利店門口的柱子旁，站著一個身影。" },
