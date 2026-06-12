@@ -137,6 +137,12 @@
     if (/凌晨|深夜|半夜|零點|一點|二點|三點|0[0-3]:|2[0-3]:|當晚/.test(t)) return "深夜";
     return t;
   }
+  // 主要地點 → 顯示名對照（美化 toast 標籤；空字串＝不顯示地點，只留語意時間）
+  const PLACE_NAME = {
+    "便利商店": "便利店", "便利商店後方": "店後停車場", "主角的日常": "",
+    "公司": "公司", "公司門口": "公司", "回家": "回家路上", "回家路上": "回家路上",
+    "我的房間": "房間", "商店街": "商店街",
+  };
   // place 常為「時間・地點」，取「・」後的真正地點，與語意時間組成 label
   function sceneLabel(place, time) {
     const p = String(place || "").trim();
@@ -146,6 +152,7 @@
       loc = parts.find((s) => !/白天|深夜|半夜|凌晨|傍晚|黃昏|下午|午後|午休|清晨|早晨|當晚|零點|[一二三]點|\d{1,2}:/.test(s)) || parts[parts.length - 1];
     } else loc = p;
     loc = loc.split(/[ 　]/)[0];                              // 主要地點，去掉次區域（同店多次移動 → dedup 只彈一次）
+    if (PLACE_NAME[loc] !== undefined) loc = PLACE_NAME[loc];  // 顯示名美化
     const st = semanticTime(time);
     if (loc && st) return `${st}　${loc}`;
     return loc || st || "";
@@ -168,9 +175,12 @@
     const html = kind === "end"
       ? `<div class="day-card day-end"><div class="dc-no">Day ${d}</div><div class="dc-rule"></div><div class="dc-tail">${tail}</div></div>`
       : `<div class="day-card"><div class="dc-no">Day ${d}</div><div class="dc-rule"></div><div class="dc-title">${info.title}</div>${info.subtitle ? `<div class="dc-sub">${info.subtitle}</div>` : ""}</div>`;
+    const tb = $("topbar"); if (tb) tb.classList.add("dim");        // eyecatch 期間頂列退讓，避免壓迫
     $("sceneCard").classList.add("daycard");
     await fadeCard(html, kind === "end" ? 1400 : 1900);
     $("sceneCard").classList.remove("daycard");
+    if (tb) tb.classList.remove("dim");
+    if (kind === "start") { const dt = $("dayTag"); if (dt && dt.classList) { dt.classList.remove("flash"); void dt.offsetWidth; dt.classList.add("flash"); } }  // 資訊轉移到頂列：微亮提示
   }
 
   async function showSNS(line) {
@@ -311,6 +321,7 @@
   async function finale() {
     const tone = M.judge(state.scores, state.flags);
     cleared.add(tone); localStorage.setItem(ENDK, JSON.stringify([...cleared]));
+    setMood("soft");                                  // ending_soft：結局柔光（結局台詞若另設 bgm 會覆蓋）
     if (tone === "hidden_pov") {
       await playNodes(H.endings.warm_true || []);
       await playNodes(H.endings.hidden_pov_tail || []);
