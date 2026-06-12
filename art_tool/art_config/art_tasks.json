@@ -13,8 +13,8 @@
     {
       "id": "transparent_standee",
       "name": "透明立繪",
-      "prompt_suffix": "full body, standing pose, visual novel sprite, isolated character on plain flat background, even lighting, no shadow on ground",
-      "extra_negative": "complex background, scenery, props, multiple people",
+      "prompt_suffix": "(full body, standing pose, complete figure from head to toe, shoes visible:1.2), wide shot, visual novel sprite, isolated character on plain flat background, even lighting, no shadow on ground",
+      "extra_negative": "complex background, scenery, props, multiple people, waist up, upper body only, bust shot, cropped legs, cut off feet, close-up portrait",
       "width": null,
       "height": null,
       "output_kind": "character"

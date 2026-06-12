@@ -5,10 +5,10 @@
       "character_id": "hoshino_akari",
       "name": "星野灯",
       "role": "當紅國民偶像（20 歲）。公開形象耀眼完美，私下被嚴格管理，會用偽裝偷偷當一次普通人。",
-      "visual_core": "1girl, 20 years old, japanese idol, slender, fair skin, gentle but slightly guarded expression, adult woman, long straight pure black hair, blunt bangs, turquoise green eyes, wearing a plain dark baseball cap pulled low, oversized loose hoodie, winter scarf, cold winter air, faint visible breath",
+      "visual_core": "1girl, 20 years old, japanese idol, slender, fair skin, gentle but slightly guarded expression, adult woman, long straight pure black hair, blunt bangs, turquoise green eyes, wearing a plain dark baseball cap pulled low, oversized loose hoodie, winter scarf, black slim tapered pants, simple winter trousers, cold winter air, faint visible breath",
       "hair": "long straight pure black hair, blunt bangs（2026-06-13 使用者定案：黑長直＝國民偶像感）",
       "eyes": "turquoise green eyes, double eyelid（提案，canon 未鎖：取自定稿臉 seed 3159559483，與 A070 冬夜青×店光暖橘主題色相合，可改）",
-      "outfit": "private disguise (winter, per A030/A070): oversized loose hoodie, plain dark baseball cap pulled low, winter scarf; 口罩為差分（白口罩掛下巴），預設無口罩版; (alt stage outfit: idol stage costume, sparkling, bright)",
+      "outfit": "private disguise (winter, per A030/A070): oversized loose hoodie, plain dark baseball cap pulled low, winter scarf, 黑色窄管褲（2026-06-13 定案預設；高丹數黑絲襪留作私服時尚差分）; 口罩差分三態：無口罩（放鬆）/ 半戴（過渡）/ 戴好（警戒），預設無口罩; 基準立繪（褲子版定稿）=asset 20260613051933_225bc2d9（由 d0d576e0 腿部重繪而來；頭身比基準，所有差分以遮罩局部重繪自此圖製作）; (alt stage outfit: idol stage costume, sparkling, bright)",
       "personality_visual": "嘴硬愛開玩笑卻偶爾露出疲憊；觀察周遭、警戒有沒有人盯著她；放鬆時眼睛會稍微彎起來",
       "must_keep": [
         "成年女性（20 歲），不可有未成年外觀",
