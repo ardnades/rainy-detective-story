@@ -112,12 +112,11 @@
     el.innerHTML = `${node.time ? `<span class="st-time">${node.time}</span>` : ""}<span class="st-line"></span><span class="st-place">${node.place || ""}</span>`;
     $("speaker").classList.add("hidden"); $("dialogue").textContent = ""; $("advanceHint").classList.remove("show");
     el.classList.remove("hidden"); void el.offsetWidth; el.classList.add("show");   // scrim＋標籤上滑＋底線展開
-    await delay(skipMode ? 4 : 240);
-    if (node.mood) setMood(node.mood);                                               // 在 scrim 下換背景，露出時已是新場景（dissolve 感）
-    await Promise.race([delay(skipMode ? 4 : 1000), waitAdvance(0)]);
-    el.classList.remove("show");                                                     // 柔和淡出，露出新場景
-    await delay(skipMode ? 4 : 480);
-    el.classList.add("hidden");
+    await delay(skipMode ? 4 : 200);
+    if (node.mood) setMood(node.mood);                                               // 在 scrim 下換背景（dissolve 感）
+    await Promise.race([delay(skipMode ? 4 : 520), waitAdvance(0)]);                 // 較短的停留
+    el.classList.remove("show");                                                     // 開始淡出——但不等它淡完
+    setTimeout(() => el.classList.add("hidden"), skipMode ? 4 : 460);                // 讓地點卡淡出與下一句旁白「同時發生」，更爽快、不拖重複
   }
 
   // 章節卡（Day Start／Day End）。標題缺省時仍可運作（只顯示 Day 編號）
