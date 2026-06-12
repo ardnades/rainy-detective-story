@@ -42,6 +42,34 @@
       "sampler": "euler_ancestral",
       "scheduler": "normal",
       "optional_lora": null
+    },
+    {
+      "id": "cool_reflective_illustration",
+      "name": "清冷淡彩插畫風",
+      "checkpoint": "anima_baseV10.safetensors",
+      "positive_prefix": "score_7, safe, black hair, beautiful turquoise eyes, paint splatter on cap, glossy plastic cap texture, oversized loose t-shirt, holding a fountain pen, fully rendered complete body, fully drawn legs and feet, quiet calm expression, (masterpiece, best quality, ultra-detailed, absurdres:1.3), modern japanese anime illustration, contemporary digital art, (soft cel shading, painterly rendering:1.2), delicate thin lineart, smooth clean lines, subtle brush strokes, fine detailing, (soft volumetric lighting, gentle rim light, glossy highlights:1.25), (translucent skin texture, soft subsurface scattering:1.15), beautiful color gradients, vibrant yet soft pastel tones, (detailed iris with light reflections:1.2), glossy eye highlights, subtle blush, soft facial shading, clean white background, high contrast, sharp focus, cinematic lighting, smooth rendering, premium anime style, high quality shading",
+      "negative_prompt": "score_1, score_2, score_3, artist name, flat shading, hard shadows, harsh lighting, over-saturated, low contrast, 3d render, realistic, western style, thick lines, rough sketch, blurry, lowres, bad anatomy, bad hands, deformed, plastic skin, dull colors, cartoonish, chibi, flat color, cel shading without gradients, blonde hair, pink hair, white hair, glamour portrait, sexy outfit, cleavage, smiling idol expression, cut off feet, unfinished legs, nsfw",
+      "width": 896,
+      "height": 1344,
+      "steps": 40,
+      "cfg": 4.5,
+      "sampler": "er_sde",
+      "scheduler": "simple",
+      "optional_lora": null
+    },
+    {
+      "id": "airy_editorial_illustration",
+      "name": "空氣感插畫風",
+      "checkpoint": "anima_baseV10.safetensors",
+      "positive_prefix": "score_7, safe, young woman, black hair, aqua eyes, oversized pale blue t-shirt, baseball cap, holding a fountain pen, fully rendered complete body, fully drawn legs and feet, masterpiece, best quality, contemporary Japanese character illustration, airy semi-painterly anime rendering, delicate sparse lineart, thin understated outlines, soft tonal shading, subtle brush-painted surfaces, high-key exposure, luminous whites, minimal pale gray backdrop, lots of negative space, clean editorial illustration feeling, cool cyan reflected light and warm orange accent reflections, glossy highlight accents on hair and clothing, soft translucent skin rendering, low-saturation skin tones, clear aqua-like eyes with gentle reflections, quiet restrained mood, understated expression, calm distant mood, refined modern illustration",
+      "negative_prompt": "score_1, score_2, score_3, artist name, generic anime portrait, idol poster style, glamorous beauty shot, moe style, overly cute expression, thick lineart, hard contour lines, flat cel shading, harsh shadow shapes, strong black outlines, oversaturated colors, candy colors, flashy neon palette, plastic skin, rubbery highlights, 3d render, realistic skin, western comic style, chibi, cartoonish proportions, busy background, detailed scenery, high contrast poster lighting, polished commercial key visual, hyper-clean anime rendering, generic waifu illustration, visual novel portrait, glossy idol face, cleavage, sexy glamour, pin-up pose, fanservice, cut off feet, unfinished legs, nsfw",
+      "width": 896,
+      "height": 1344,
+      "steps": 30,
+      "cfg": 4.0,
+      "sampler": "er_sde",
+      "scheduler": "simple",
+      "optional_lora": null
     }
   ]
 }

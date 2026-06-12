@@ -162,13 +162,15 @@ def test_load_art_styles_real_file():
     assert data is not None
     ids = [s["id"] for s in data["styles"]]
     assert "soft_romance_avg" in ids
-    assert len(data["styles"]) == 3
-    # soft_romance_avg 已綁定實際 Anima 模型；其餘畫風仍可為佔位字串（皆不可因此失敗）
+    assert len(data["styles"]) == 5
+    # 綁定實際 Anima 模型的畫風；其餘畫風仍可為佔位字串（皆不可因此失敗）
     by_id = {s["id"]: s for s in data["styles"]}
-    assert by_id["soft_romance_avg"]["checkpoint"] == "anima_baseV10.safetensors"
+    anima_bound = {"soft_romance_avg", "cool_reflective_illustration", "airy_editorial_illustration"}
+    for sid in anima_bound:
+        assert by_id[sid]["checkpoint"] == "anima_baseV10.safetensors"
     assert all(
         s["checkpoint"] == config.CHECKPOINT_PLACEHOLDER
-        for s in data["styles"] if s["id"] != "soft_romance_avg"
+        for s in data["styles"] if s["id"] not in anima_bound
     )
 
 
@@ -183,7 +185,7 @@ def test_load_art_tasks_real_file():
     data = config.load_art_tasks()
     assert data is not None
     ids = [t["id"] for t in data["tasks"]]
-    assert ids == ["character_rough", "transparent_standee", "event_cg", "background", "sns_promo"]
+    assert ids == ["character_rough", "transparent_standee", "event_cg", "background", "sns_promo", "key_visual_portrait"]
 
 
 def test_load_json_missing_file_returns_none(tmp_path):

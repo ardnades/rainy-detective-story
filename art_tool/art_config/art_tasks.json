@@ -45,6 +45,15 @@
       "width": 1024,
       "height": 1024,
       "output_kind": "cg"
+    },
+    {
+      "id": "key_visual_portrait",
+      "name": "插畫風格研究 / 主視覺草案",
+      "prompt_suffix": "full body, full body illustration, complete figure from head to feet, seated on the floor, knees drawn up, legs and feet fully drawn and detailed, holding a fountain pen, looking at viewer, key visual illustration, single character",
+      "extra_negative": "multiple people, plain reference sheet, headshot only, group, cropped at waist, cut off legs, cut off feet, unfinished legs, blank legs",
+      "width": 896,
+      "height": 1344,
+      "output_kind": "character"
     }
   ]
 }
