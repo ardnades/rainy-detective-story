@@ -1,0 +1,47 @@
+{
+  "_comment": "畫風設定。checkpoint 目前為佔位字串，請於 ComfyUI 安裝 .safetensors 後，於後台選單選擇實際模型，或直接填入此處。width/height/steps/cfg/sampler/scheduler 為 base_txt2img workflow 的預設 patch 值。",
+  "styles": [
+    {
+      "id": "soft_romance_avg",
+      "name": "柔和戀愛 AVG 風",
+      "checkpoint": "anima_baseV10.safetensors",
+      "positive_prefix": "masterpiece, best quality, score_7, safe, highly detailed, soft lighting, pastel color palette, gentle shading, romance visual novel style, dreamy atmosphere, clean lineart, beautiful detailed eyes",
+      "negative_prompt": "worst quality, low quality, score_1, score_2, score_3, artist name, lowres, bad anatomy, bad hands, missing fingers, extra fingers, fused fingers, text, watermark, signature, jpeg artifacts, blurry, deformed, disfigured, mutated, ugly, nsfw",
+      "width": 832,
+      "height": 1216,
+      "steps": 30,
+      "cfg": 4.0,
+      "sampler": "er_sde",
+      "scheduler": "simple",
+      "optional_lora": null
+    },
+    {
+      "id": "mobile_game_portrait",
+      "name": "現代手機遊戲立繪風",
+      "checkpoint": "<請填入你的checkpoint檔名>",
+      "positive_prefix": "masterpiece, best quality, ultra detailed, mobile game character art, gacha game illustration, vivid colors, sharp focus, dynamic lighting, intricate costume details, glossy rendering, cinematic, full body splash art",
+      "negative_prompt": "lowres, bad anatomy, bad hands, missing fingers, extra fingers, fused fingers, text, watermark, signature, jpeg artifacts, blurry, deformed, disfigured, mutated, ugly, worst quality, low quality, flat color, sketch, nsfw",
+      "width": 832,
+      "height": 1216,
+      "steps": 30,
+      "cfg": 7.0,
+      "sampler": "dpmpp_2m_sde",
+      "scheduler": "karras",
+      "optional_lora": null
+    },
+    {
+      "id": "light_watercolor_jp",
+      "name": "淡彩日系插圖風",
+      "checkpoint": "<請填入你的checkpoint檔名>",
+      "positive_prefix": "masterpiece, best quality, japanese illustration, light watercolor, soft pastel tones, delicate linework, airy atmosphere, gentle gradient, minimal shading, slice of life, warm natural light",
+      "negative_prompt": "lowres, bad anatomy, bad hands, missing fingers, extra fingers, fused fingers, text, watermark, signature, jpeg artifacts, blurry, deformed, disfigured, mutated, ugly, worst quality, low quality, oversaturated, heavy shadow, 3d, nsfw",
+      "width": 896,
+      "height": 1152,
+      "steps": 26,
+      "cfg": 6.0,
+      "sampler": "euler_ancestral",
+      "scheduler": "normal",
+      "optional_lora": null
+    }
+  ]
+}

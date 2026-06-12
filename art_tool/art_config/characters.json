@@ -1,0 +1,27 @@
+{
+  "_comment": "角色視覺設定。星野灯的『年齡20、當紅偶像、私下鴨舌帽+口罩+寬鬆連帽衣偽裝、嘴硬』來自 projects/hoshino-akari/brief/canon-log.md（A001/A030）為凍結事實。hair/eyes/outfit 細節 canon 未鎖定，為可調整的視覺提案；must_keep/avoid 為生成約束。所有角色均為 18 歲以上。",
+  "characters": [
+    {
+      "character_id": "hoshino_akari",
+      "name": "星野灯",
+      "role": "當紅國民偶像（20 歲）。公開形象耀眼完美，私下被嚴格管理，會用偽裝偷偷當一次普通人。",
+      "visual_core": "1girl, 20 years old, japanese idol, slender, fair skin, gentle but slightly guarded expression, adult woman",
+      "hair": "long straight dark brown hair with soft inner curl at the ends, side-swept bangs (提案，canon 未鎖，可改)",
+      "eyes": "warm amber-brown eyes, double eyelid, expressive (提案，canon 未鎖，可改)",
+      "outfit": "private disguise: oversized loose hoodie, baseball cap pulled low, white face mask hanging at chin; (alt stage outfit: idol stage costume, sparkling, bright)",
+      "personality_visual": "嘴硬愛開玩笑卻偶爾露出疲憊；觀察周遭、警戒有沒有人盯著她；放鬆時眼睛會稍微彎起來",
+      "must_keep": [
+        "成年女性（20 歲），不可有未成年外觀",
+        "私下造型核心：鴨舌帽 + 口罩（可掛下巴）+ 寬鬆連帽衣",
+        "輪廓清秀、氣質偶像感但帶一點藏起來的疲憊"
+      ],
+      "avoid": [
+        "露骨或情色內容（nsfw）",
+        "未成年 / 幼態（loli、child、teen）",
+        "可辨識的真實藝人臉孔",
+        "壞手、多指、缺指",
+        "過度成熟 / 妖豔風格"
+      ]
+    }
+  ]
+}

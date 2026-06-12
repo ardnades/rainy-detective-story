@@ -1,0 +1,21 @@
+# === ComfyUI 美術生成工具 (art_tool) ===
+# 本機設定（含 ComfyUI 路徑、URL）不進 repo
+art_tool/.env
+
+# Python 暫存
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+
+# 工作暫存（diff 備份、一次性腳本草稿）
+tmp/
+
+# === 候選圖暫存：一律不進 repo（避免大量圖片污染） ===
+public/assets/generated/
+# 但保留資料夾佔位
+!public/assets/generated/.gitkeep
+
+# 注意：採用後的正式素材（public/assets/characters/、public/assets/cg/）
+# 屬於玩家端正式素材，要進 repo，故此處【不】忽略它們。

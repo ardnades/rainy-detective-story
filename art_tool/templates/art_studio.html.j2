@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI 美術生成工具 — ComfyUI Studio</title>
+  <link rel="stylesheet" href="/static/art_studio.css">
+</head>
+<body>
+<div class="wrap">
+
+  <!-- 1. Header -->
+  <header class="header">
+    <h1>AI 美術生成工具 · ComfyUI Studio</h1>
+    <span class="mode-badge">{{ mode_label }}</span>
+  </header>
+
+  <!-- 2. ComfyUI Status Card -->
+  <section class="card status-{{ status_level }}">
+    <div class="card-head">
+      <h2>ComfyUI 狀態</h2>
+      <span class="dot dot-{{ status_level }}"></span>
+      <span class="status-word">
+        {% if status_level == 'green' %}正常{% elif status_level == 'yellow' %}可連線（需注意）{% else %}離線 / 不通{% endif %}
+      </span>
+    </div>
+    <table class="kv">
+      <tr><th>連線</th><td>{{ '線上 online' if health.online else '離線 offline' }}</td></tr>
+      <tr><th>ComfyUI URL</th><td>{{ health.url or '（未設定）' }}</td></tr>
+      <tr><th>GPU</th><td>{{ health.gpu or '—' }}</td></tr>
+      <tr><th>VRAM</th><td>
+        {% if health.vram_total_mb %}{{ health.vram_free_mb }} / {{ health.vram_total_mb }} MB（free / total）{% else %}—{% endif %}
+      </td></tr>
+      <tr><th>Queue</th><td>{{ '可用' if health.queue_ok else '不可用' }}</td></tr>
+      <tr><th>Checkpoint 數</th><td>{{ health.checkpoints | length }}</td></tr>
+      <tr><th>訊息</th><td>{{ health.message }}</td></tr>
+    </table>
+    {% if health.warnings %}
+      <ul class="warnings">
+        {% for w in health.warnings %}<li>⚠ {{ w }}</li>{% endfor %}
+      </ul>
+    {% endif %}
+
+    <!-- 3. Checkpoint / offline 提示 -->
+    {% if not health.online %}
+      <p class="hint hint-red">{{ offline_hint }}</p>
+    {% elif not health.checkpoints_ok %}
+      <p class="hint hint-yellow">{{ checkpoint_empty_hint }}</p>
+    {% elif not health.queue_ok %}
+      <p class="hint hint-yellow">{{ queue_down_hint }}</p>
+    {% endif %}
+  </section>
+
+  <!-- 4. Config Summary -->
+  <section class="card">
+    <h2>設定摘要</h2>
+    <table class="kv">
+      <tr><th>art config dir</th><td>{{ art_config_dir }}</td></tr>
+      <tr><th>workflow path</th><td>{{ workflow_path }}</td></tr>
+      <tr><th>workflow</th><td>{{ 'loaded ✓' if workflow_loaded else 'missing ✗' }}</td></tr>
+      <tr><th>ComfyUI path</th><td>
+        {{ comfyui_path.path or '（未偵測到，請於 .env 設定 COMFYUI_PATH）' }}
+      </td></tr>
+      <tr><th>畫風 styles</th><td>{{ styles | length }}</td></tr>
+      <tr><th>角色 characters</th><td>{{ characters | length }}</td></tr>
+      <tr><th>用途 tasks</th><td>{{ tasks | length }}</td></tr>
+    </table>
+  </section>
+
+  <!-- 5. Generation Form Placeholder -->
+  <section class="card">
+    <h2>生成設定</h2>
+    <form id="dry-run-form" class="gen-form">
+      <label>畫風
+        <select name="style_id">
+          {% for s in styles %}<option value="{{ s.id }}">{{ s.name }}</option>{% endfor %}
+        </select>
+      </label>
+      <label>角色
+        <select name="character_id">
+          {% for c in characters %}<option value="{{ c.character_id }}">{{ c.name }}</option>{% endfor %}
+        </select>
+      </label>
+      <label>用途
+        <select name="task_id">
+          {% for t in tasks %}<option value="{{ t.id }}">{{ t.name }}</option>{% endfor %}
+        </select>
+      </label>
+      <label>生成張數
+        <input type="number" name="batch_count" value="8" min="{{ batch_min }}" max="{{ batch_max }}">
+      </label>
+      <label>寬 width
+        <input type="number" name="width" value="832" min="{{ dim_min }}" max="{{ dim_max }}">
+      </label>
+      <label>高 height
+        <input type="number" name="height" value="1216" min="{{ dim_min }}" max="{{ dim_max }}">
+      </label>
+      <label>Seed（留空＝自動隨機）
+        <input type="text" name="seed" value="" placeholder="auto">
+      </label>
+      <label>Checkpoint
+        <select name="checkpoint" {% if not health.checkpoints_ok %}disabled{% endif %}>
+          {% if health.checkpoints_ok %}
+            {% for ck in health.checkpoints %}<option value="{{ ck }}">{{ ck }}</option>{% endfor %}
+          {% else %}
+            <option value="">No checkpoint found</option>
+          {% endif %}
+        </select>
+      </label>
+
+      <div class="actions">
+        <button type="submit" class="btn btn-secondary" id="dry-run-btn">Dry Run Validate</button>
+        <button type="button" class="btn {{ 'btn-primary' if can_generate else 'btn-disabled' }}"
+                id="generate-btn" {% if not can_generate %}disabled{% endif %}
+                title="{% if can_generate %}送出生成候選圖{% else %}需 online + queue + checkpoint + workflow 都就緒才能生成{% endif %}">
+          Generate Candidates
+        </button>
+      </div>
+    </form>
+    <pre id="dry-run-result" class="result" hidden></pre>
+  </section>
+
+  <!-- Job status panel -->
+  <section class="card">
+    <h2>生成工作 (Job)</h2>
+    <div id="job-panel" class="job-panel" hidden></div>
+    <p id="job-empty" class="muted">尚未送出生成。按「Generate Candidates」後這裡會顯示進度。</p>
+  </section>
+
+  <!-- Candidate grid -->
+  <section class="card">
+    <div class="card-head">
+      <h2>候選圖</h2>
+      <button type="button" class="btn btn-secondary btn-sm" id="reload-candidates">重新整理</button>
+    </div>
+    <div id="candidate-grid" class="candidate-grid"></div>
+    <p id="candidate-empty" class="muted">尚無候選圖。</p>
+  </section>
+
+  <!-- 6. Next Step Notice -->
+  <section class="card notice">
+    <h2>下一步</h2>
+    <ul>
+      <li>生成 → 候選圖 → 採用（adopt）流程已可用；缺 checkpoint 時 Generate 會 disable。</li>
+      <li>使用說明見 art_tool/README.md；真機驗收清單見 art_tool/docs/SMOKE_TEST_0E.md。</li>
+      <li>Admin Panel / fine-tune UI / TTS / Live2D 規格見 art_tool/docs/NEXT_PHASE_ADMIN_PANEL.md，目前尚未接入。</li>
+    </ul>
+  </section>
+
+</div>
+<script src="/static/art_studio.js"></script>
+</body>
+</html>

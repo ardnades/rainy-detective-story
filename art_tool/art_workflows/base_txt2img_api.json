@@ -1,0 +1,75 @@
+{
+  "_comment": "ComfyUI API 格式（非 UI workflow）。Anima Base v1.0（CircleStone Labs x Comfy Org，2B 動漫文生圖 DiT）txt2img。模型為單檔 DiT，需 UNETLoader（檔放 models/diffusion_models/）+ 獨立 CLIPLoader(qwen_3_06b_base, type=stable_diffusion) + VAELoader(qwen_image_vae)。patch_workflow 會替換：節點4 unet_name(模型)、節點5 width/height、節點6 positive、節點7 negative、節點3 seed/steps/cfg/sampler_name/scheduler。節點10/11 的 text encoder 與 vae 為固定資產。官方建議 er_sde/simple、cfg 4-5、30-50 steps。_comment 會在送 /prompt 前由 patch_workflow 自動剔除。",
+  "3": {
+    "class_type": "KSampler",
+    "inputs": {
+      "seed": 0,
+      "steps": 30,
+      "cfg": 4.0,
+      "sampler_name": "er_sde",
+      "scheduler": "simple",
+      "denoise": 1.0,
+      "model": ["4", 0],
+      "positive": ["6", 0],
+      "negative": ["7", 0],
+      "latent_image": ["5", 0]
+    }
+  },
+  "4": {
+    "class_type": "UNETLoader",
+    "inputs": {
+      "unet_name": "anima_baseV10.safetensors",
+      "weight_dtype": "default"
+    }
+  },
+  "10": {
+    "class_type": "CLIPLoader",
+    "inputs": {
+      "clip_name": "qwen_3_06b_base.safetensors",
+      "type": "stable_diffusion",
+      "device": "default"
+    }
+  },
+  "11": {
+    "class_type": "VAELoader",
+    "inputs": {
+      "vae_name": "qwen_image_vae.safetensors"
+    }
+  },
+  "5": {
+    "class_type": "EmptyLatentImage",
+    "inputs": {
+      "width": 832,
+      "height": 1216,
+      "batch_size": 1
+    }
+  },
+  "6": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "masterpiece, best quality",
+      "clip": ["10", 0]
+    }
+  },
+  "7": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "worst quality, low quality",
+      "clip": ["10", 0]
+    }
+  },
+  "8": {
+    "class_type": "VAEDecode",
+    "inputs": {
+      "samples": ["3", 0],
+      "vae": ["11", 0]
+    }
+  },
+  "9": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "filename_prefix": "hoshino_akari/character_rough",
+      "images": ["8", 0]
+    }
+  }
+}

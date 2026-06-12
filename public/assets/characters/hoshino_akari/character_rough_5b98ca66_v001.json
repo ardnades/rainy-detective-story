@@ -1,0 +1,19 @@
+{
+  "positive_prompt": "masterpiece, best quality, score_7, safe, highly detailed, soft lighting, pastel color palette, gentle shading, romance visual novel style, dreamy atmosphere, clean lineart, beautiful detailed eyes, 1girl, 20 years old, japanese idol, slender, fair skin, gentle but slightly guarded expression, adult woman, character concept art, upper body, simple background, neutral pose, clear face, reference sheet feel",
+  "negative_prompt": "worst quality, low quality, score_1, score_2, score_3, artist name, lowres, bad anatomy, bad hands, missing fingers, extra fingers, fused fingers, text, watermark, signature, jpeg artifacts, blurry, deformed, disfigured, mutated, ugly, nsfw",
+  "seed": 579634062,
+  "checkpoint": "anima_baseV10.safetensors",
+  "width": 832,
+  "height": 1216,
+  "steps": 30,
+  "cfg": 4.0,
+  "sampler": "er_sde",
+  "scheduler": "simple",
+  "created_at": "2026-06-13T01:25:11",
+  "style_id": "soft_romance_avg",
+  "character_id": "hoshino_akari",
+  "source_task_id": "character_rough",
+  "source_asset_id": "20260613012511_5b98ca66",
+  "adopted_at": "2026-06-13T01:27:06",
+  "generated_at": "2026-06-13T01:25:11"
+}

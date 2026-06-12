@@ -1,0 +1,50 @@
+{
+  "_comment": "圖片用途設定。prompt_suffix 會接在 style.positive_prefix + character.visual_core 之後；extra_negative 會併入 negative_prompt。width/height 為 null 時沿用畫風預設，非 null 則覆蓋（例如背景用橫向、SNS 用方形）。output_kind 決定採用後落地到 characters/ 或 cg/。",
+  "tasks": [
+    {
+      "id": "character_rough",
+      "name": "角色初稿",
+      "prompt_suffix": "character concept art, upper body, simple background, neutral pose, clear face, reference sheet feel",
+      "extra_negative": "",
+      "width": null,
+      "height": null,
+      "output_kind": "character"
+    },
+    {
+      "id": "transparent_standee",
+      "name": "透明立繪",
+      "prompt_suffix": "full body, standing pose, visual novel sprite, isolated character on plain flat background, even lighting, no shadow on ground",
+      "extra_negative": "complex background, scenery, props, multiple people",
+      "width": null,
+      "height": null,
+      "output_kind": "character"
+    },
+    {
+      "id": "event_cg",
+      "name": "事件 CG",
+      "prompt_suffix": "event illustration, cinematic composition, detailed background, emotional scene, dynamic lighting, storytelling moment",
+      "extra_negative": "",
+      "width": 1216,
+      "height": 832,
+      "output_kind": "cg"
+    },
+    {
+      "id": "background",
+      "name": "背景",
+      "prompt_suffix": "background scenery only, no people, no character, establishing shot, detailed environment, atmospheric lighting",
+      "extra_negative": "1girl, 1boy, person, character, face, hands",
+      "width": 1216,
+      "height": 832,
+      "output_kind": "cg"
+    },
+    {
+      "id": "sns_promo",
+      "name": "SNS 宣傳圖",
+      "prompt_suffix": "social media promo art, eye-catching, vibrant, square composition, poster style, copy space friendly",
+      "extra_negative": "text, watermark, logo",
+      "width": 1024,
+      "height": 1024,
+      "output_kind": "cg"
+    }
+  ]
+}

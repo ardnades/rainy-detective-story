@@ -1,0 +1,107 @@
+/* Art Tool 0-D 狀態頁樣式。深藍系，沿用遊戲配色。無外部 CDN。 */
+:root {
+  --bg: #0a0e1a;
+  --panel: #121a2b;
+  --panel-2: #18233a;
+  --text: #e6ecf5;
+  --muted: #8aa0c0;
+  --accent: #5d8fc9;
+  --gold: #c9a05d;
+  --green: #4caf7d;
+  --yellow: #d6a93c;
+  --red: #d65c5c;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Segoe UI", "Microsoft JhengHei", system-ui, sans-serif;
+  line-height: 1.6;
+}
+.wrap { max-width: 880px; margin: 0 auto; padding: 24px 16px 64px; }
+
+.header { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; }
+.header h1 { font-size: 1.4rem; margin: 0; }
+.mode-badge {
+  font-size: .78rem; color: var(--bg); background: var(--gold);
+  padding: 2px 10px; border-radius: 999px; font-weight: 600;
+}
+
+.card {
+  background: var(--panel); border: 1px solid #21304d; border-radius: 12px;
+  padding: 16px 18px; margin-bottom: 16px;
+}
+.card h2 { font-size: 1.05rem; margin: 0 0 10px; }
+.card-head { display: flex; align-items: center; gap: 10px; }
+.card-head h2 { margin: 0; }
+
+.status-green { border-left: 4px solid var(--green); }
+.status-yellow { border-left: 4px solid var(--yellow); }
+.status-red { border-left: 4px solid var(--red); }
+
+.dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+.dot-green { background: var(--green); }
+.dot-yellow { background: var(--yellow); }
+.dot-red { background: var(--red); }
+.status-word { color: var(--muted); font-size: .9rem; }
+
+.kv { width: 100%; border-collapse: collapse; font-size: .92rem; }
+.kv th, .kv td { text-align: left; vertical-align: top; padding: 4px 8px; border-bottom: 1px solid #1d2a44; }
+.kv th { color: var(--muted); width: 160px; font-weight: 500; }
+
+.warnings { margin: 10px 0 0; padding-left: 18px; color: var(--yellow); font-size: .88rem; }
+
+.hint { margin: 12px 0 0; padding: 10px 12px; border-radius: 8px; font-size: .92rem; }
+.hint-yellow { background: rgba(214,169,60,.12); color: var(--yellow); border: 1px solid rgba(214,169,60,.4); }
+.hint-red { background: rgba(214,92,92,.12); color: var(--red); border: 1px solid rgba(214,92,92,.4); }
+
+.gen-form { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 16px; }
+.gen-form label { display: flex; flex-direction: column; font-size: .85rem; color: var(--muted); gap: 4px; }
+.gen-form select, .gen-form input {
+  background: var(--panel-2); color: var(--text);
+  border: 1px solid #2a3a5c; border-radius: 6px; padding: 7px 9px; font-size: .92rem;
+}
+.gen-form select:disabled, .gen-form input:disabled { opacity: .5; }
+
+.actions { grid-column: 1 / -1; display: flex; gap: 12px; margin-top: 4px; }
+.btn { border: none; border-radius: 8px; padding: 9px 16px; font-size: .92rem; cursor: pointer; font-weight: 600; }
+.btn-secondary { background: var(--accent); color: var(--bg); }
+.btn-disabled { background: #2a3a5c; color: var(--muted); cursor: not-allowed; }
+
+.result {
+  margin-top: 12px; background: #0c1322; border: 1px solid #21304d; border-radius: 8px;
+  padding: 12px; font-size: .85rem; white-space: pre-wrap; word-break: break-word; color: var(--text);
+}
+.result.ok { border-color: var(--green); }
+.result.bad { border-color: var(--red); }
+
+.notice ul { margin: 0; padding-left: 18px; color: var(--muted); font-size: .9rem; }
+
+.btn-primary { background: var(--gold); color: var(--bg); }
+.btn-sm { padding: 5px 10px; font-size: .8rem; }
+.muted { color: var(--muted); font-size: .85rem; }
+
+/* Job panel */
+.job-panel {
+  background: #0c1322; border: 1px solid #21304d; border-radius: 8px;
+  padding: 12px; font-size: .85rem; white-space: pre-wrap; color: var(--text);
+}
+.job-panel.job-completed { border-color: var(--green); }
+.job-panel.job-failed { border-color: var(--red); }
+.job-panel.job-running, .job-panel.job-queued { border-color: var(--accent); }
+
+/* Candidate grid */
+.candidate-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
+.cand-card { background: var(--panel-2); border: 1px solid #2a3a5c; border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; }
+.cand-card.status-accepted { border-color: var(--green); }
+.cand-card.status-rejected { border-color: var(--red); opacity: .65; }
+.cand-card.status-problem { border-color: var(--yellow); }
+.cand-card img { width: 100%; height: 200px; object-fit: cover; background: #0c1322; display: block; }
+.cand-card .noimg { height: 200px; display: flex; align-items: center; justify-content: center; color: var(--muted); }
+.cand-meta { padding: 8px 10px; font-size: .78rem; color: var(--muted); display: flex; flex-direction: column; gap: 2px; }
+.cand-meta b { color: var(--text); }
+.cand-actions { display: flex; flex-wrap: wrap; gap: 6px; padding: 8px 10px; border-top: 1px solid #21304d; }
+.prob-sel { background: var(--panel); color: var(--text); border: 1px solid #2a3a5c; border-radius: 6px; font-size: .78rem; padding: 4px; }
+
+@media (max-width: 600px) { .gen-form { grid-template-columns: 1fr; } }

@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>星野灯線 — Story Inspector（唯讀）</title>
+  <link rel="stylesheet" href="story_inspector.css">
+</head>
+<body>
+  <div id="app">載入中…（請從 tools/ 目錄以相對路徑開啟本頁，讓 ../play/data 可被讀到）</div>
+
+  <!-- 故事資料：與 play/index.html 相同載入順序，唯讀載入到 window.HOSHINO / window.ART -->
+  <script src="../play/art.js"></script>
+  <script src="../play/data/meta.js"></script>
+  <script src="../play/data/assets.js"></script>
+  <script src="../play/data/chapters.js"></script>
+  <script src="../play/data/day1.js"></script>
+  <script src="../play/data/day2.js"></script>
+  <script src="../play/data/day3.js"></script>
+  <script src="../play/data/day4.js"></script>
+  <script src="../play/data/day5.js"></script>
+  <script src="../play/data/day6.js"></script>
+  <script src="../play/data/day7.js"></script>
+  <script src="../play/data/endings.js"></script>
+
+  <!-- 共用驗證規則（與 validate_story.js CLI 同一份）＋ inspector 視圖 -->
+  <script src="story_schema.js"></script>
+  <script src="story_inspector.js"></script>
+</body>
+</html>

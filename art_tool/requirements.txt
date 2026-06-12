@@ -1,0 +1,8 @@
+# art_tool 製作端工具依賴（玩家端不使用）
+fastapi>=0.115
+uvicorn[standard]>=0.30
+httpx>=0.27
+jinja2>=3.1
+python-dotenv>=1.0
+# 開發 / 測試
+pytest>=8.0
