@@ -19,3 +19,28 @@ public/assets/generated/
 
 # 注意：採用後的正式素材（public/assets/characters/、public/assets/cg/）
 # 屬於玩家端正式素材，要進 repo，故此處【不】忽略它們。
+
+# === 重檔影像池：archive / review / hq 實驗，不進 repo ===
+# 只忽略「影像」副檔名；同目錄的文字檔（.md / .json / .gitkeep）仍可追蹤。
+art_tool/art_archive/**/*.png
+art_tool/art_archive/**/*.jpg
+art_tool/art_archive/**/*.jpeg
+art_tool/art_archive/**/*.webp
+
+art_tool/art_review/needs_manual_cleanup/**/*.png
+art_tool/art_review/needs_manual_cleanup/**/*.jpg
+art_tool/art_review/needs_manual_cleanup/**/*.jpeg
+art_tool/art_review/needs_manual_cleanup/**/*.webp
+
+public/assets/characters/hoshino_akari/bustup_fix_ready/hq_tests/**/*.png
+public/assets/characters/hoshino_akari/bustup_fix_ready/hq_tests/**/*.jpg
+public/assets/characters/hoshino_akari/bustup_fix_ready/hq_tests/**/*.jpeg
+public/assets/characters/hoshino_akari/bustup_fix_ready/hq_tests/**/*.webp
+
+# 註：public/assets/generated/ 已於上方忽略，不重複。
+# 註：以下【不】忽略，仍可追蹤——
+#   public/assets/characters/hoshino_akari/approved/*.png（含日後去背 _alpha）
+#   public/assets/characters/hoshino_akari/bustup_approved/*.png
+#   public/assets/characters/hoshino_akari/manifest.json
+#   art_tool/character_pipeline/hoshino_akari/*.md
+#   art_tool/art_review/ASSET_CLEANUP_REPORT.md
