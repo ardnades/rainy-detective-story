@@ -1,0 +1,15 @@
+{
+  "name": "hoshino-akari",
+  "version": "1.0.0",
+  "private": true,
+  "description": "星野灯 (Hoshino Akari) — 7-night idol-romance AVG (static web game) + Anima/ComfyUI character-art pipeline.",
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ardnades/hoshino-akari.git"
+  },
+  "scripts": {
+    "validate": "node projects/hoshino-akari/tools/validate_story.js",
+    "serve": "npx --yes serve projects/hoshino-akari/play"
+  }
+}
